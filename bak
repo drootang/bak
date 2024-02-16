@@ -2,21 +2,33 @@
 
 usage() {
     echo "Usage:" 1>&2
-    echo "  bak <filename>" 1>&2
-    echo "  -c : copy (instead of move) the original file to its new backup if backup up"
+    echo "  bak <filename> [<filename> ...]" 1>&2
+    exit 1
+}
+
+help() {
+    echo "bak - create and restore simple file/directory backups"
+    echo ""
+    echo "Usage:"
+    echo "  bak <filename> [<filename> ...]"
+    echo
+    echo "bak has two possible behaviors for each input file:"
+    echo
+    echo "  backup  : If the file is not already a bak-generated backup, then"
+    echo "            it is copied and a <timestamp>.bak suffix is added"
+    echo "  restore : If the file is already a bak-generated backup, then"
+    echo "            it is restored to its original filename. If the original file"
+    echo "            already exists, that file is itself bak-ed"
     exit
 }
 
-# COPY=0
-# while getopts "c" o; do
-#     case "${o}" in
-#         c)
-#             COPY=1 ;;
-#         *)
-#             usage ;;
-#     esac
-# done
-# shift $(expr $OPTIND - 1 )
+while getopts "h" o; do
+    case "${o}" in
+        h) help;;
+        *) usage;;
+    esac
+done
+shift $((OPTIND-1))
 fnames=("$@")
 # Must be at least one file specified
 [[ "${#fnames[@]}" == "0" ]] && usage
