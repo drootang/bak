@@ -2,7 +2,9 @@
 
 usage() {
     echo "Usage:" 1>&2
-    echo "  bak <filename> [<filename> ...]" 1>&2
+    echo "  bak [-h] <filename> [<filename> ...]" 1>&2
+    echo 1>&2
+    echo "  -h : show help and exit" 1>&2
     exit 1
 }
 
@@ -10,7 +12,9 @@ help() {
     echo "bak - create and restore simple file/directory backups"
     echo ""
     echo "Usage:"
-    echo "  bak <filename> [<filename> ...]"
+    echo "  bak [-h] <filename> [<filename> ...]"
+    echo
+    echo "  -h : show help and exit" 1>&2
     echo
     echo "bak has two possible behaviors for each input file:"
     echo
