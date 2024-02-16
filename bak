@@ -1,0 +1,51 @@
+#!/bin/bash
+
+usage() {
+    echo "Usage:" 1>&2
+    echo "  bak <filename>" 1>&2
+    echo "  -c : copy (instead of move) the original file to its new backup if backup up"
+    exit
+}
+
+# COPY=0
+# while getopts "c" o; do
+#     case "${o}" in
+#         c)
+#             COPY=1 ;;
+#         *)
+#             usage ;;
+#     esac
+# done
+# shift $(expr $OPTIND - 1 )
+fnames=("$@")
+# Must be at least one file specified
+[[ "${#fnames[@]}" == "0" ]] && usage
+
+suffix_re='(.*)\.[0-9]{6}-[0-9]{6}\.bak'
+
+# bak an individual file
+fbak() {
+    SUFFIX=`date +%y%m%d-%H%M%S`
+    $2 "$1" "$1.$SUFFIX.bak"
+}
+
+# unbak an individual file. Args: filename unbakedfilename
+funbak() {
+    # If the destination already exists, bak it first
+    if [[ -e "$2" ]] ; then
+        fbak "$2" mv
+    fi
+    # Move the bak'ed file to its original name
+    mv "$1" "$2"
+}
+
+# For each file, if it is already bak'ed, unbak it, otherwise bak it
+for fn in "${fnames[@]}"; do
+    [[ -z "$fn" ]] && echo "ERROR: Illegal blank filename" 1>&2 && usage
+    if [[ "$fn" =~ $suffix_re ]]; then
+        # This file was already bak'ed
+        funbak "$fn" "${BASH_REMATCH[1]}"
+    else
+        fbak "$fn" "cp -r"
+    fi
+done
