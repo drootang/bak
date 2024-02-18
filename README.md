@@ -41,3 +41,13 @@ Because `bak` uses timestamp suffixes, you can create several local backups. `ba
     -rw-r--r--  1 drootang  staff     0B Feb 17 22:58 a.240217-225813.bak
     -rw-r--r--  1 drootang  staff     0B Feb 17 22:58 a.240217-225815.bak
     -rw-r--r--  1 drootang  staff     0B Feb 17 22:53 bc
+
+## Advantages of `bak` over `cp`
+
+`bak` will never overwrite anything. Unless you have `cp` aliased to `cp -i`, you run the risk of accidentally overwriting something important while using `cp` to manage local file versions.
+
+When restoring a previously backed-up file, `bak` only requires one command where `cp` would require two.
+
+## Notes
+
+The existence of this script should not be taken as an endorsement of haphazard backup strategies nor inefficient workflows. Sometimes you just need to be *sure* a copy of a file is around, or need quick old-school local versioning.
